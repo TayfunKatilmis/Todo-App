@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
                 ('title', models.TextField()),
                 ('description', models.TextField()),
                 ('createdDate', models.DateField()),
-                ('upDate', models.DateField()),
+                ('updatedDate', models.DateField()),
             ],
         ),
     ]

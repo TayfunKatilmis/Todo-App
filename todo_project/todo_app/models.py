@@ -6,4 +6,4 @@ class todoItem(models.Model):
     title = models.TextField()
     description = models.TextField()
     createdDate = models.DateField()
-    upDate = models.DateField()
+    updatedDate = models.DateField(auto_now=True)
