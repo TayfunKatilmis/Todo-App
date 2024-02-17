@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView
+from django.urls import reverse_lazy
 from .models import todoItem
 # Create your views here.
 
@@ -13,3 +15,10 @@ class TodoDetail(DetailView):
     model = todoItem
     context_object_name = 'todo'
     template_name = 'todo_app/todo.html'
+
+
+class TodoCreate(CreateView):
+    model = todoItem
+    fields = '__all__'
+    success_url = reverse_lazy('todoItems')
+    template_name = 'todo_app/todo_form.html'
