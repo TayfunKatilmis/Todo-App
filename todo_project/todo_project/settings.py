@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'todo_app',
+    'todo_app.apps.TodoAppConfig',
 ]
 
 MIDDLEWARE = [
@@ -76,9 +76,11 @@ WSGI_APPLICATION = 'todo_project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        "NAME": "todoDb",
-        "USER": "postgres",
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'dbTodo', 
+        'USER': 'postgres',
+        'HOST': 'localhost', 
+        'PORT': '5432',
     }
 }
 
