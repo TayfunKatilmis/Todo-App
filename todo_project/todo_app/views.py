@@ -7,7 +7,7 @@ from django.urls import reverse_lazy
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import TodoSerializer
-from .models import todoItem
+from .models import Task
 # Create your views here.
 
 @api_view(['GET'])
@@ -23,19 +23,19 @@ def apiOverview(request):
 
 @api_view(['GET'])
 def todoList(request):
-    todos = todoItem.objects.all()
+    todos = Task.objects.all()
     serializer = TodoSerializer(todos, many = True)
     return Response(serializer.data)
 
 @api_view(['GET'])
 def todoDetail(request, pk):
-    todos = todoItem.objects.get(id=pk)
+    todos = Task.objects.get(id=pk)
     serializer = TodoSerializer(todos, many = False)
     return Response(serializer.data)
 
 @api_view(['POST'])
 def todoUpdate(request, pk):
-    todos = todoItem.objects.get(id = pk)
+    todos = Task.objects.get(id = pk)
     serializer = TodoSerializer(instance=todos, data=request.data)
     if serializer.is_valid():
         serializer.save()
