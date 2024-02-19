@@ -4,13 +4,13 @@ from .models import Task, User
 
 class TodoSerializer(serializers.ModelSerializer):
     class Meta: 
-        model = Task,
+        model = Task
         fields = '__all__'
 
 class TodoRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = ['id', 'title', 'content', 'created_by']
+        fields = ['title', 'description']
 
 class UserRegisterSerializer(serializers.ModelSerializer):
     class Meta:

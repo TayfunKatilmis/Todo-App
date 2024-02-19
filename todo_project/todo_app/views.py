@@ -7,7 +7,6 @@ from django.urls import reverse_lazy
 from rest_framework.decorators import api_view
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.response import Response
-from rest_framework import status
 from .serializers import TodoSerializer, TodoRegisterSerializer, UserSerializer, UserRegisterSerializer
 from .models import Task, User
 import jwt, datetime
@@ -15,12 +14,8 @@ from django.contrib.auth import get_user_model
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
-
-
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import TodoSerializer
-from .models import Task
+from rest_framework import status
 # Create your views here.
 
 @api_view(['GET'])
@@ -36,7 +31,7 @@ def apiOverview(request):
 
 @api_view(['GET'])
 def todoList(request):
-    todos = Task.objects.all()
+    todos = Task.objects.all().order_by('-id')
     serializer = TodoSerializer(todos, many = True)
     return Response(serializer.data)
 
@@ -48,20 +43,45 @@ def todoDetail(request, pk):
 
 @api_view(['POST'])
 def todoUpdate(request, pk):
-    todos = Task.objects.get(id = pk)
-    serializer = TodoSerializer(instance=todos, data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-    return Response(serializer.data)
+    token = request.COOKIES.get('jwt')
+    payload = jwt.decode(token, 'secret-app-key',algorithms=['HS256'])
+
+    user = User.objects.get(email=payload['email'])
+
+    try:
+        task = Task.objects.get(id=pk)
+        serializer = TodoSerializer(instance=task, data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+
+        return Response(serializer.data)
+
+    except Exception as err:
+        return Response({'msg': 'You do not have access to this item!'}, status=status.HTTP_403_FORBIDDEN)
 
 @api_view(['POST'])
 def todoCreate(request):
-    serializer = TodoSerializer(data=request.data)
+    serializer = TodoRegisterSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
     return Response(serializer.data)
 
+@api_view(['DELETE'])
+def todoDelete(request, pk):
+    token = request.COOKIES.get('jwt')
+    payload = jwt.decode(token, 'secret-app-key', algorithms=['HS256'])
 
+    user = User.objects.get(email=payload['email'])
+
+    try:
+        todo = Task.objects.get(id=pk)
+        todo.delete()
+        return Response({'msg': 'Item deleted successfully'}, status=status.HTTP_200_OK)
+
+    except Exception as err:
+        return Response({'msg': 'You do not have access to this item!'}, status=status.HTTP_403_FORBIDDEN)
+    
 class UserLoginView(APIView):
 
     @method_decorator(csrf_exempt)
@@ -93,8 +113,7 @@ class UserLoginView(APIView):
         }
 
         return response
-
-
+    
 class UserRegisterView(APIView):
 
     def post(self, request):
