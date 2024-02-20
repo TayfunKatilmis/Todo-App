@@ -20,12 +20,18 @@ from rest_framework import status
 
 @api_view(['GET'])
 def apiOverview(request):
+    
     api_urls = {
-        'List' : '/todo-list/',
-        'Detail View' : '/todo-detail/<int:pk>',
-        'Create' : '/todo-create/',
-        'Update' : '/todo-update/<int:pk>',
-        'Delete' : '/todo-delete/<int:pk>',
+        'Todo List' : 'todo-list/',
+        'Todo Detail View' : 'todo-detail/<int:pk>',
+        'Todo Create' : 'todo-create/',
+        'Todo Update' : 'todo-update/<int:pk>',
+        'Todo Delete' : 'todo-delete/<int:pk>',
+
+        'User Login' : 'user-login/',
+        'User Register' : 'user-register/',
+        'Current User' : 'current-user/',
+        'User Logout' : 'user-logout/',
     }
     return Response(api_urls)
 
@@ -168,34 +174,3 @@ class GetUserView(APIView):
         serializer = UserSerializer(user)
 
         return Response(serializer.data)
-#class TodoList(ListView):
-#    model = todoItem
-#    context_object_name = 'todos'
-#    template_name = 'todo_app/todo_list.html'
-    
-#class TodoDetail(DetailView):
-#    model = todoItem
-#    context_object_name = 'todo'
-#    template_name = 'todo_app/todo.html'
-
-
-#class TodoCreate(CreateView):
-#    model = todoItem
-#    fields = '__all__'
-#    success_url = reverse_lazy('todoItems')
-#    template_name = 'todo_app/todo_form.html'
-
-#class TodoUpdate(UpdateView):
-#    model = todoItem
-#    fields = '__all__'
-#    success_url = reverse_lazy('todoItems')
-#    template_name = 'todo_app/todo_form.html'
-
-
-#class TodoDelete(DeleteView):
-#    model = todoItem
-#    context_object_name = 'todo'
-#    success_url = reverse_lazy('todoItems')
-#    template_name = 'todo_app/todo_confirm_delete.html'
-
-

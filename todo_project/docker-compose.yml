@@ -20,7 +20,7 @@ services:
     environment:
       - POSTGRES_DB=todoDb
       - POSTGRES_USER=postgres
-      - POSTGRES_HOST_AUTH_METHOD=trust  # Bu satır eklenmiştir
+      - POSTGRES_HOST_AUTH_METHOD=trust
 
       
 volumes:
